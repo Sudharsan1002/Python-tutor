@@ -4,14 +4,18 @@ import React, { useState, useEffect } from "react";
 const Settings = () => {
   const [apiKey, setApiKey] = useState("");
 
- useEffect(() => {
-   const savedKey = localStorage.getItem("geminiApiKey");
-   if (savedKey) {
-     setApiKey(savedKey);
-   } else {
-     setApiKey("AIzaSyBjK1pTO2G2QSQqXic_VXshpdAjyGCI-ec"); 
-   }
- }, []);
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    
+    const savedKey = localStorage.getItem("geminiApiKey");
+    if (savedKey) {
+      setApiKey(savedKey);
+    } else {
+      setApiKey("your-default-api-key"); 
+    }
+  }
+}, []);
+
 
   const handleKeyChange = (e) => {
     const newKey = e.target.value;
