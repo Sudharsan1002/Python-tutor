@@ -1,9 +1,14 @@
 import axios from "axios";
 
-export const askGeminiAI = async (message, apiKey) => {
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+export const askGeminiAI = async (message) => {
   try {
+    if (!API_KEY) {
+      throw new Error("API key is missing! Please set VITE_GEMINI_API_KEY in .env");
+    }
     const response = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
         {
             contents: [
                 {
@@ -14,7 +19,7 @@ export const askGeminiAI = async (message, apiKey) => {
         },
         {
             headers: {
-                "Content-Type":"application/jsoon"
+                "Content-Type":"application/json"
             }
         }
     );

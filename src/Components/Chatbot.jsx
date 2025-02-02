@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { askGeminiAI } from "../Api";
-import { BiBot, BiSend } from "react-icons/bi";
-import { FaBots, FaRobot } from "react-icons/fa6";
+import {  BiSend } from "react-icons/bi";
+import {  FaRobot } from "react-icons/fa6";
 import { motion } from "framer-motion";
-
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -14,27 +13,26 @@ const containerVariants = {
   },
 };
 
-
-const Chatbot = ({ apikey }) => {
+const Chatbot = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
-     setMessages((prev) => [...prev, userMessage]);
-     setInput("");
-     setLoading(true);
+    
 
-    const aiResponse = await askGeminiAI(input, apikey);
+    const userMessage = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    const aiResponse = await askGeminiAI(input);
     const botMessage = { role: "assistant", content: aiResponse };
 
     setMessages((prev) => [...prev, botMessage]);
     setLoading(false);
-
-    
   };
 
   return (
@@ -58,7 +56,7 @@ const Chatbot = ({ apikey }) => {
               }`}
             >
               {msg.role === "assistant" && (
-                <FaRobot className="w-full h-12 mr-3 text-gray-700 border border-gray-500 rounded-full p-2 shadow-lg animate-pulse" />
+                <FaRobot className="w-100 h-12 mr-3 text-gray-700 border border-gray-500 rounded-full p-2 shadow-lg animate-pulse" />
               )}
               <p
                 className={`p-2 rounded-lg ${
@@ -80,7 +78,12 @@ const Chatbot = ({ apikey }) => {
             className="flex-1 p-2 border rounded-l-lg"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); 
+                handleSend();
+              }
+            }}
             placeholder="Ask a python question"
           />
 

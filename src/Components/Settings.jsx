@@ -2,7 +2,9 @@ import { div } from "framer-motion/client";
 import React, { useState, useEffect } from "react";
 
 const Settings = () => {
-  const [apiKey, setApiKey] = useState("");
+  const [apiKey, setApiKey] = useState(() => {
+    return localStorage.getItem("geminiApiKey") || "your-default-api-key";
+  });
 
 useEffect(() => {
   if (typeof window !== "undefined") {
@@ -10,9 +12,7 @@ useEffect(() => {
     const savedKey = localStorage.getItem("geminiApiKey");
     if (savedKey) {
       setApiKey(savedKey);
-    } else {
-      setApiKey("your-default-api-key"); 
-    }
+    } 
   }
 }, []);
 
